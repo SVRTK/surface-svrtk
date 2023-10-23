@@ -10,6 +10,8 @@ I.e., the surface generation script does not require Draw-EM segmentation output
 - corpus callossum label (output of BOUNTI)
 - internal brain ROI label (output of BOUNTI)
 
+<img src="config/dhcp-bounti-surface-example.jpg" alt="AUTOSVRTKEXAMPLE" height="170" align ="center" />
+
 
 _Note: The scripts were installed in the [**fetalsvrtk/surface:1.20**](https://hub.docker.com/r/fetalsvrtk/surface) docker container together with optimised parameter files and MIRTK software. I.e., they cannot be used as standalone applications and need to be executed from within the dockers._  
 
