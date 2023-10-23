@@ -249,9 +249,7 @@ if [ ${completed} -eq 0 ]; then
     python3 ${mirtk_dir}/recon-neonatal-cortex --config ${parameters_dir}/recon_config-bounti.cfg --sessions=${subj} --prefix=surfaces/${subj}/vtk/${subj} --temp=surfaces/${subj}/vtk/temp-recon/${subj} --white --pial --verbose
 
 fi
-
-
-exit 
+ 
 
 
 echo
