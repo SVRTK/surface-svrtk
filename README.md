@@ -13,7 +13,7 @@ I.e., the surface generation script does not require Draw-EM segmentation output
 
 _Note: The scripts were installed in the [**fetalsvrtk/surface:1.20**](https://hub.docker.com/r/fetalsvrtk/surface) docker container together with optimised parameter files and MIRTK software. I.e., they cannot be used as standalone applications and need to be executed from within the dockers._  
 
-The surface generation scripts were originall created and optimised by [Logan Williams](https://github.com/lzjwilliams) and [Alena Uus](https://github.com/alenauus) based on Draw-EM. Additional optimisataion and testing was performed by Aakash Saboo.     
+The surface generation scripts were originall created and optimised by [Logan Williams](https://github.com/lzjwilliams) and [Alena Uus](https://github.com/alenauus) under supervision of Dr Emma Robinson based on Draw-EM. Additional optimisation and testing was performed by Aakash Saboo.     
 
 Development of SVRTK surface module was supported by projects led by Dr Emma Robinson, Dr Maria Deprez, Prof Mary Rutherford, Dr Lisa Story, Prof David Edwards and Prof Jo Hajnal.
 
