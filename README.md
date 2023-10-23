@@ -3,7 +3,7 @@ Scripts for automated brain surface processing for fetal MRI (work in progress)
 
 This repository contains scripts for automated extraction of brain sufaces for fetal brain MRI in [SVRTK surface dockers](https://hub.docker.com/r/fetalsvrtk/surface/) based on DrawEM pipeline](https://github.com/MIRTK/DrawEM) (Makropoulos, Robinson et al., 2018) using deep learning [BOUNTI](https://elifesciences.org/reviewed-preprints/88818) fetal brain segmentation outputs (Uus, Kyriakopoulou et al., 2023). 
 
-I.e., the surface generation script does not require Draw-EM segmentation outputs and uses BOUNTI deep learning labels as an input instead :
+I.e., the surface generation script does not require Draw-EM segmentation outputs and uses BOUNTI deep learning labels ([BOUNTI docker](https://hub.docker.com/r/fetalsvrtk/segmentation)) as an input instead :
 - 3D T2w SVR reconstructed image in the [atlas](https://gin.g-node.org/kcl_cdb/fetal_brain_mri_atlas) space
 - global BET brain label (output of BOUNTI)
 - brain tissue segmentation labels (output of BOUNTI)
@@ -30,9 +30,9 @@ Citation and acknowledgements
 
 In case you found SVRTK useful please give appropriate credit to the software:  
 
-> SVRTK surface dockers: [https://hub.docker.com/r/fetalsvrtk/](https://hub.docker.com/r/fetalsvrtk/surface/)
+> SVRTK surface dockers: [https://hub.docker.com/r/fetalsvrtk/surface](https://hub.docker.com/r/fetalsvrtk/surface/)
 
-> SVRTK segmentation dockers: [https://hub.docker.com/r/fetalsvrtk/](https://hub.docker.com/r/fetalsvrtk/segmentation/)
+> SVRTK segmentation dockers: [https://hub.docker.com/r/fetalsvrtk/segmentation](https://hub.docker.com/r/fetalsvrtk/segmentation/)
 
 > Makropoulos A, Robinson EC, Schuh A, Wright R, Fitzgibbon S, Bozek J, Counsell SJ, Steinweg J, Vecchiato K, Passerat-Palmbach J, Lenz G, Mortari F, Tenev T, Duff EP, Bastiani M, Cordero-Grande L, Hughes E, Tusor N, Tournier JD, Hutter J, Price AN, Teixeira RPAG, Murgasova M, Victor S, Kelly C, Rutherford MA, Smith SM, Edwards AD, Hajnal JV, Jenkinson M, Rueckert D. The developing human connectome project: A minimal processing pipeline for neonatal cortical surface reconstruction. Neuroimage. 2018 Jun;173:88-112. doi: [https://doi.org/10.1016/j.neuroimage.2018.01.054](https://doi.org/10.1016/j.neuroimage.2018.01.054).
 
