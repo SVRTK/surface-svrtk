@@ -1,12 +1,19 @@
 Scripts for automated brain surface processing for fetal MRI (work in progress)
 ====================
 
-This repository contains scripts for automated extraction of brain sufaces for fetal brain MRI in [SVRTK surface dockers](https://hub.docker.com/r/fetalsvrtk/surface/) based on DrawEM pipeline](https://github.com/MIRTK/DrawEM) (Makropoulos, Robinson et al., 2018) using deep learning [BOUNTI](https://elifesciences.org/reviewed-preprints/88818) fetal brain segmentation outputs (Uus, Kyriakopoulou et al., 2023). I.e., the surface generation script does not require Draw-EM outputs and uses deep learning labels as an input instead.
+This repository contains scripts for automated extraction of brain sufaces for fetal brain MRI in [SVRTK surface dockers](https://hub.docker.com/r/fetalsvrtk/surface/) based on DrawEM pipeline](https://github.com/MIRTK/DrawEM) (Makropoulos, Robinson et al., 2018) using deep learning [BOUNTI](https://elifesciences.org/reviewed-preprints/88818) fetal brain segmentation outputs (Uus, Kyriakopoulou et al., 2023). 
+
+I.e., the surface generation script does not require Draw-EM segmentation outputs and uses BOUNTI deep learning labels as an input instead :
+- 3D T2w SVR reconstructed image in the [atlas](https://gin.g-node.org/kcl_cdb/fetal_brain_mri_atlas) space
+- global BET brain label (output of BOUNTI)
+- brain tissue segmentation labels (output of BOUNTI)
+- corpus callossum label (output of BOUNTI)
+- internal brain ROI label (output of BOUNTI)
 
 
-_Note: The scripts were installed in the **fetalsvrtk/surface:1.10** docker container together with optimised parameter files and MIRTK software. I.e., they cannot be used as standalone applications and need to be executed from the dockers._  
+_Note: The scripts were installed in the [**fetalsvrtk/surface:1.20**](https://hub.docker.com/r/fetalsvrtk/surface) docker container together with optimised parameter files and MIRTK software. I.e., they cannot be used as standalone applications and need to be executed from within the dockers._  
 
-The surface generation scripts were created by [Logan Williams](https://github.com/lzjwilliams) and [Alena Uus](https://github.com/alenauus).     
+The surface generation scripts were originall created and optimised by [Logan Williams](https://github.com/lzjwilliams) and [Alena Uus](https://github.com/alenauus) based on Draw-EM. Additional optimisataion and testing was performed by Aakash Saboo.     
 
 Development of SVRTK surface module was supported by projects led by Dr Emma Robinson, Dr Maria Deprez, Prof Mary Rutherford, Dr Lisa Story, Prof David Edwards and Prof Jo Hajnal.
 
