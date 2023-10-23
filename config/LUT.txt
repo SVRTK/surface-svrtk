@@ -1,0 +1,41 @@
+eCSF_L
+1 220 216 20 255
+eCSF_R
+2 220 216 20 255
+Cortical_GM_L
+3 103 255 255 255
+Cortical_GM_R
+4 103 255 255 255
+Fetal_WM_L
+5 70 20 170 255
+Fetal_WM_R
+6 70 20 170 255
+Lateral_Ventricle_L
+7 220 60 220 255
+Lateral_Ventricle_R
+8 220 60 220 255
+Cavum_septum_pellucidum
+9 65 100 20 255
+Brainstem
+10 65 100 20 255
+Cerebellum_L
+11 140 220 220 255
+Cerebellum_R
+12 140 220 220 255
+Cerebellar_Vermis
+13 220 220 100 255
+Basal_Ganglia_L
+14 220 220 100 255
+Basal_Ganglia_R
+15 60 20 140 255
+Thalamus_L
+16 60 20 140 255
+Thalamus_R
+17 230 148 34 255
+Third_Ventricle
+18 230 148 34 255
+Fourth Ventricle
+19 119 159 176 255
+Corpus_Callosum
+20 255 192 32 255
+
