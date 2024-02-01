@@ -8,7 +8,6 @@ I.e., the surface generation script does not require Draw-EM segmentation output
 - global BET brain label (output of BOUNTI)
 - brain tissue segmentation labels (output of BOUNTI)
 - corpus callossum label (output of BOUNTI)
-- internal brain ROI label (output of BOUNTI)
 
 <img src="config/dhcp-bounti-surface-example.jpg" alt="AUTOSVRTKEXAMPLE" height="140" align ="center" />
 
