@@ -309,12 +309,12 @@ int main(int argc, char **argv)
 
 
             // for (int z=0; z<output_mask.GetZ(); z++) {
-            for (int z=cc_z_min; z>(z_min+(cc_z_min-z_min)*0.3); z=z-1) {
+            for (int z=cc_z_min; z>(z_min+(cc_z_min-z_min)*0.0-1); z=z-1) {
 
                 if (output_mask(x,y,z) == internal_id) {
 
 
-                    double dz = (cc_z_min - z);
+                    double dz = 0.7*(cc_z_min - z);
 
                     if (y > (cc_y_max - dz)) output_mask(x,y,z) = remove_id;
 
@@ -326,6 +326,21 @@ int main(int argc, char **argv)
 
         }
     }
+
+
+    for (int y=0; y<output_mask.GetY(); y++) { 
+            for (int z=0; z<output_mask.GetZ(); z++) {
+                for (int x=0; x<output_mask.GetX(); x++) {
+    
+                    if (output_mask(x,y,z) == 66) {
+
+                        output_mask(x,y,z) = org_mask(x,y,z);
+
+                    }
+
+                }
+            }
+        }
 
 
     // }

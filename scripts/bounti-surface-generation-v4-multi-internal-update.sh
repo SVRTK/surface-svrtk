@@ -26,20 +26,17 @@ echo
 
 
 
-
-if [ "$#" -ne 7 ]; then
+if [ "$#" -ne 5 ]; then
     echo ""
-    echo "Draw-EM based fetal brain surface generation from BOUNTI-V1.0 19 tissue labels"
+    echo "Draw-EM based fetal brain surface generation from BOUNTI-V2.0 43 mulri-ROI labels"
     echo
     echo "Source code: https://github.com/SVRTK/surface-svrtk"
     echo "Docker: https://hub.docker.com/r/fetalsvrtk/surface"
     echo
-    echo "Usage : bash /software/surface-scripts/bounti-surface-generation-v3-tissue-internal-update.sh "
+    echo "Usage : bash /software/surface-scripts/bounti-surface-generation-v4-multi-internal.sh "
     echo "[subject ID - e.g., sub-1234_ses-000]"
     echo "[full path to T2 file - e.g., /home/data/in-files/sub-1234_ses-000-T2.nii.gz]"
-    echo "[full path to BOUNTI labels file - e.g., /home/data/in-files/sub-1234_ses-000-mask-brain_dhcp-19.nii.gz]"
-    echo "[full path to BET labels file - e.g., /home/data/in-files/sub-1234_ses-000-mask-brain_bet-1.nii.gz]"
-    echo "[full path to CC labels file - e.g., /home/data/in-files/sub-1234_ses-000-mask-brain_cc-2.nii.gz]"
+    echo "[full path to BOUNTI.V02 labels file - e.g., /home/data/in-files/sub-1234_ses-000-mask-brain_bounti-43.nii.gz]"
     echo "[full path to the folder for processing outputs - e.g., /home/data/proc/sub-1234_ses]"
     echo "[flag to cleaning the output processing folder - e.g., 0 - no cleaning, 1 - remove all old files]"
     echo ""
@@ -58,10 +55,8 @@ fi
 subj=$1
 T2_in=$2
 bounti_label_in=$3
-bet_label_in=$4
-cc_label_in=$5
-workdir=$6
-clean_flag=$7
+workdir=$4
+clean_flag=$5
 
 
 
@@ -70,8 +65,6 @@ echo "Inputs: "
 echo " - subject ID : " ${subj}
 echo " - input T2 file : " ${T2_in}
 echo " - BOUNTI labels file : " ${bounti_label_in}
-echo " - BET labels file : " ${bet_label_in}
-echo " - CC labels file : " ${cc_label_in}
 echo " - folder for processing outputs : " ${workdir}
 echo " - flag for cleaning the output folder : " ${clean_flag}
 echo ""
@@ -102,11 +95,9 @@ meshtosphere_dir=/software/SphericalMesh/build/bin
 parameters_dir=/software/surface-scripts
 
 
-bounti_labels_roi=mask-brain_dhcp-19
-cc_labels_roi=mask-brain_cc-2
+bounti_labels_roi=mask-brain_bounti-43
 bet_labels_roi=mask-brain_bet-1
-bounti_cc_labels_roi=mask-brain_dhcp-cc-20
-internal_labels_roi=mask-brain_internal-1
+bounti_labels_roi_final=mask-brain_bounti-43-internal
 
 
 if [ ${clean_flag} -eq 1 ]; then
@@ -133,6 +124,7 @@ if [ ! -f ${workdir}/${t2dir}/${subj}.nii.gz ];then
     cp ${T2_in} ${workdir}/${t2dir}/${subj}.nii.gz
 fi
 
+
 test_file=${workdir}/${t2dir}/${subj}.nii.gz
 if [ ! -f ${test_file} ];then
     echo "ERROR : no input file " ${T2_in} " / " ${test_file}
@@ -141,43 +133,13 @@ fi
 
 if [ ! -f ${workdir}/${segdir}/${subj}-${bounti_labels_roi}.nii.gz ];then
     cp ${bounti_label_in} ${workdir}/${segdir}/${subj}-${bounti_labels_roi}.nii.gz
+    ${mirtk_dir}/calculate-element-wise ${workdir}/${segdir}/${subj}-${bounti_labels_roi}.nii.gz -binarize 0.5 -o ${workdir}/${segdir}/${subj}-${bet_labels_roi}.nii.gz
 fi
+
 
 test_file=${workdir}/${segdir}/${subj}-${bounti_labels_roi}.nii.gz
 if [ ! -f ${test_file} ];then
     echo "ERROR : no input file " ${bounti_label_in} " / " ${test_file}
-fi
-
-
-if [ ! -f ${workdir}/${segdir}/${subj}-${bet_labels_roi}.nii.gz ];then
-    cp ${bet_label_in} ${workdir}/${segdir}/${subj}-${bet_labels_roi}.nii.gz
-fi
-
-
-test_file=${workdir}/${segdir}/${subj}-${bet_labels_roi}.nii.gz
-if [ ! -f ${test_file} ];then
-    echo "ERROR : no input file " ${bet_label_in} " / " ${test_file}
-fi
-
-
-if [ ! -f ${workdir}/${segdir}/${subj}-${cc_labels_roi}.nii.gz ];then
-    cp ${cc_label_in} ${workdir}/${segdir}/${subj}-${cc_labels_roi}.nii.gz
-fi
-
-
-test_file=${workdir}/${segdir}/${subj}-${cc_labels_roi}.nii.gz
-if [ ! -f ${test_file} ];then
-    echo "ERROR : no input file " ${cc_label_in} " / " ${test_file}
-fi
-
-
-if [ ! -f ${workdir}/${segdir}/${subj}-${internal_labels_roi}.nii.gz ];then
-    echo
-    echo "Generating internal label ... " ${workdir}/${segdir}/${subj}-${internal_labels_roi}.nii.gz
-    echo
-    
-    bash /software/surface-scripts/slava_create_internal.sh ${workdir}/${segdir}/${subj}-${bounti_labels_roi}.nii.gz ${workdir}/${segdir}/${subj}-${internal_labels_roi}.nii.gz > /home/tmp.txt
-    
 fi
 
 
@@ -237,37 +199,23 @@ cleanup(){
 }
 
 
-
-echo
-echo ".........................................................................."
-echo ".........................................................................."
-echo
-
-echo " - Processing segmentations (adding CC & internal labels to BOUNTI-V1.0) ..."
-if [ ! -f ${segdir}/${subj}-${bounti_cc_labels_roi}.nii.gz ];then
  
-    ${mirtk_dir}/dilate-image ${segdir}/${subj}-${internal_labels_roi}.nii.gz ${segdir}/${subj}-${internal_labels_roi}.nii.gz
-    # ${mirtk_dir}/fill-holes ${segdir}/${subj}-${internal_labels_roi}.nii.gz ${segdir}/${subj}-${internal_labels_roi}.nii.gz
-    ${mirtk_dir}/replace-label-dhcp ${segdir}/${subj}-${internal_labels_roi}.nii.gz ${segdir}/${subj}-${bounti_labels_roi}.nii.gz ${segdir}/${subj}-${bounti_labels_roi}-internal.nii.gz
-    ${mirtk_dir}/calculate-element-wise ${segdir}/${subj}-${cc_labels_roi}.nii.gz -binarize 0.5 -o ${segdir}/cc.nii.gz
-    ${mirtk_dir}/dilate-image ${segdir}/cc.nii.gz ${segdir}/cc.nii.gz
-    ${mirtk_dir}/calculate-element-wise ${segdir}/cc.nii.gz -add -1 -mul -1 = ${segdir}/inv-cc.nii.gz
-    ${mirtk_dir}/calculate-element-wise ${segdir}/cc.nii.gz -mul 20 = ${segdir}/cc.nii.gz 
-    ${mirtk_dir}/calculate-element-wise ${segdir}/${subj}-${bounti_labels_roi}-internal.nii.gz -mul ${segdir}/inv-cc.nii.gz -add ${segdir}/cc.nii.gz = ${segdir}/${subj}-${bounti_cc_labels_roi}.nii.gz
-    ${mirtk_dir}/fix-internal ${segdir}/${subj}-${bounti_cc_labels_roi}.nii.gz ${segdir}/${subj}-${bounti_cc_labels_roi}.nii.gz 20 23
+echo
+echo ".........................................................................."
+echo ".........................................................................."
+echo
 
-    cp ${segdir}/${subj}-${bounti_cc_labels_roi}.nii.gz ${segdir}/${subj}-${bounti_cc_labels_roi}-ORG.nii.gz
+echo " - Processing segmentations (expanding internal & CC in BOUNTI-V2.0) ..."
+if [ ! -f ${segdir}/${subj}-${bounti_labels_roi_final}.nii.gz ];then
 
+    # bash /software/surface-scripts/label-propagation-internal-roi-multi.sh ${workdir}/${t2dir}/${subj}.nii.gz ${workdir}/${segdir}/${subj}-${bounti_labels_roi}.nii.gz /${workdir}/${segdir}/${subj}-mask-brain_internal-1.nii.gz > /home/tmp.txt
 
-    ${mirtk_dir}/calculate-element-wise ${segdir}/${subj}-${cc_labels_roi}.nii.gz -binarize 0.5 -o ${segdir}/cc-org.nii.gz
-     ${mirtk_dir}/extract-connected-components ${segdir}/cc-org.nii.gz ${segdir}/cc-org.nii.gz
-    # ${mirtk_dir}/dilate-image ${segdir}/cc-org.nii.gz ${segdir}/cc-org.nii.gz
-    # ${mirtk_dir}/erode-image ${segdir}/cc-org.nii.gz ${segdir}/cc-org.nii.gz
+    # bash /software/surface-scripts/slava_create_internal.sh ${workdir}/${segdir}/${subj}-${bounti_labels_roi}.nii.gz ${workdir}/${segdir}/${subj}-mask-brain_internal-1.nii.gz > /home/tmp.txt
 
 
-    ${mirtk_dir}/fix-wings ${segdir}/${subj}-${bounti_cc_labels_roi}-ORG.nii.gz ${segdir}/${subj}-${bounti_labels_roi}.nii.gz ${segdir}/cc-org.nii.gz ${segdir}/${subj}-${internal_labels_roi}.nii.gz ${segdir}/${subj}-${bounti_cc_labels_roi}.nii.gz
+    # ${mirtk_dir}/replace-label-dhcp-multi ${workdir}/${segdir}/${subj}-mask-brain_internal-1.nii.gz ${segdir}/${subj}-${bounti_labels_roi}.nii.gz ${segdir}/${subj}-${bounti_labels_roi_final}.nii.gz
 
-
+    cp ${segdir}/${subj}-${bounti_labels_roi}.nii.gz ${segdir}/${subj}-${bounti_labels_roi_final}.nii.gz
 
 fi
 
@@ -275,7 +223,6 @@ echo
 echo ".........................................................................."
 echo ".........................................................................."
 echo
-
 
 
 completed=1
@@ -290,22 +237,11 @@ done
 echo " - Extracting surfaces (recon-neonatal-cortex) ..."
 if [ ${completed} -eq 0 ]; then
 
-    echo  /home/data/recon_config-bounti.cfg
-
-    python3 ${mirtk_dir}/recon-neonatal-cortex --config /home/data/bin/recon_config-bounti.cfg --sessions=${subj} --prefix=surfaces/${subj}/vtk/${subj} --temp=surfaces/${subj}/vtk/temp-recon/${subj} --white --pial --verbose
+    python3 ${mirtk_dir}/recon-neonatal-cortex --config ${parameters_dir}/recon_config-bounti-multi.cfg --sessions=${subj} --prefix=surfaces/${subj}/vtk/${subj} --temp=surfaces/${subj}/vtk/temp-recon/${subj} --white --pial --verbose
 
 fi
 
 
-
-if  [ ! -f ${outvtk}/${subj}.L.pial.native.surf.vtk ];then
-
-
-    echo ${subj} >  /home/bin/rerun/${subj}.txt
-
-    exit 
-
-fi 
 
 echo
 echo ".........................................................................."
